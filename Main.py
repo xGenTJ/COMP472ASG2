@@ -1,4 +1,5 @@
 from General import *
+from Heuristics import *
 
 puzzleList = readFile("testFile.txt")
 

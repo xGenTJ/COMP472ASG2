@@ -1,7 +1,7 @@
-from itertools import chain
 
 import numpy as np
-from scipy.spatial.distance import cdist
+from Heuristics import *
+
 
 goalState1 = [[1, 2, 3, 4],
               [5, 6, 7, 0]]
@@ -110,49 +110,7 @@ def getPuzzle(list):
     return puzzle, goalState1, goalState2
 
 
-def hammingDistance(state, goalState):
 
-    return (np.array(state) == np.array(goalState)).sum() -1
-
-def manhattanDistance(state, goalState):
-
-    def index_2d(myList, v):
-        for i, x in enumerate(myList):
-            if v in x:
-                return i, x.index(v)
-
-    manDist = 0
-    currentRow = 0
-    currentColumn = 0
-    goalRow = 0
-    goalColumn = 0
-    rowDistance = 0
-    columnDistance = 0
-
-    for row in range(len(state)): #iterating thru all the rows
-
-        for element in state[row]: #iterating thru all the columns
-
-            if element != 0:
-
-                currentRow, currentColumn = index_2d(state, element)
-                goalRow, goalColumn = index_2d(goalState, element)
-
-                rowDistance += abs(currentRow - goalRow)
-                columnDistance += abs(currentColumn - goalColumn)
-
-    manDist = rowDistance + columnDistance
-
-    return manDist
-
-    # def calculate(value, goalList):
-    #
-    #     row = 0
-    #     column = 0
-    #
-    #     for list in goalList:
-    #
-    #         for element in list:
 
 state = [[0, 2, 3, 4],
          [5, 6, 7, 1]]
