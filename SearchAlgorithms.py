@@ -17,7 +17,7 @@ def moveLeft(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' to the left for a cost of 1')
+        print('Moved', number, 'to the left for a cost of 1')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost +=1
@@ -45,7 +45,7 @@ def moveRight(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' to the right for a cost of 1')
+        print('Moved', number, 'to the right for a cost of 1')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost +=1
@@ -73,7 +73,7 @@ def moveUp(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' up for a cost of 1')
+        print('Moved', number, 'up for a cost of 1')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost +=1
@@ -101,7 +101,7 @@ def moveDown(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' down for a cost of 1')
+        print('Moved', number, 'down for a cost of 1')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost +=1
@@ -129,7 +129,7 @@ def moveDiagonalUpLeft(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' diagonally up left for a cost of 3')
+        print('Moved', number, 'diagonally up left for a cost of 3')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost += 3
@@ -158,7 +158,7 @@ def moveDiagonalUpRight(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' diagonally up right for a cost of 3')
+        print('Moved', number, 'diagonally up right for a cost of 3')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost += 3
@@ -187,7 +187,7 @@ def moveDiagonalDownLeft(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' diagonally down left for a cost of 3')
+        print('Moved', number, 'diagonally down left for a cost of 3')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
         global totalCost
         totalCost += 3
@@ -216,7 +216,51 @@ def moveDiagonalDownRight(number, currentState):
 
         futureState[futureY][futureX] = number
         futureState[currentY][currentX] = swappedNumber
-        print('Moved ', number, ' diagonally down right for a cost of 3')
+        print('Moved', number, 'diagonally down right for a cost of 3')
+        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
+
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
+        return None
+
+    return futureState
+
+
+def wrapAround(number, currentState):
+    futureState = copy.deepcopy(currentState)
+    currentY, currentX = get2dIndex(currentState, number)
+
+    if currentX == 0:
+        if currentY == 0:    #top left corner
+            futureX = -1
+            futureY = -1    #moves to bottom right
+
+        else:   #bottom left corner
+            futureX = -1
+            futureY = 0 #moves to top right
+
+    elif currentX == len(currentState[0]) - 1:
+
+        if currentY == 0:  # top right corner
+            futureX = 0
+            futureY = -1  # moves to bottom left
+
+        else:  # bottom right corner
+            futureX = 0
+            futureY = 0 #moves to top left
+
+    # print("current position: (", currentX, ", ", currentY, ")")
+    # print("future position: (", futureX, ", ", futureY, ")")
+    global totalCost
+    totalCost += 2
+    try:
+        swappedNumber = currentState[futureY][futureX]
+
+        futureState[futureY][futureX] = number
+        futureState[currentY][currentX] = swappedNumber
+        print('Wrapped', number, 'around for a cost of 2')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
 
     except Exception as e:
@@ -243,6 +287,7 @@ try:
     future = moveDiagonalUpRight(4, future)
     future = moveDiagonalUpLeft(1, future)
     future = moveDiagonalDownLeft(5, future)
+    future = wrapAround(3, future)
     print('Total Cost: ', totalCost)
 except TypeError:
     print('Encountered Error')
