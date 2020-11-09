@@ -1,3 +1,4 @@
+from itertools import chain
 
 import numpy as np
 from Heuristics import *
@@ -53,29 +54,20 @@ def listTo2DList(list, nbrows):
 
     return newList
 
+def setGoalState1(twoDlist, nbrows):
 
-def checkGoalStates(listState):
-    # condition to completed puzzle
-    # print(goalState1)
-    if listState == goalState1 or listState == goalState2:
-        print('You have reached the goal state!')
-    # continue with search algorithm
-    else:
-        print('Keep trying!')
+    newList = list(chain.from_iterable(twoDlist))
 
-def setGoalState1(list, nbrows):
-    listSize = len(list)
-    newList = sorted(list)
+    listSize = len(newList)
+    newList = sorted(newList)
     newList.append(newList.pop(0))
-
     goalState = []
 
     tempList = newList[0:int(listSize/nbrows)]
     tempList2 = newList[int(listSize/nbrows):listSize]
     goalState.append(tempList)
     goalState.append(tempList2)
-    # print(goalState)
-    return newList
+    return goalState
 
 def setGoalState2(nbelements, nbrows):
 
@@ -110,8 +102,6 @@ def getPuzzle(list):
     return puzzle, goalState1, goalState2
 
 
-
-
 state = [[0, 2, 3, 4],
          [5, 6, 7, 1]]
 
@@ -119,4 +109,4 @@ goalState = [[6, 5, 7, 3],
              [2, 0, 4, 1]]
 
 # print(hammingDistance(state, goalState))
-print(manhattanDistance(state, goalState))
+# print(manhattanDistance(state, goalState))

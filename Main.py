@@ -1,21 +1,34 @@
 from General import *
 from Heuristics import *
+from UniformCostSearch import  *
+# puzzleList = readFile("testFile.txt")
 
-puzzleList = readFile("testFile.txt")
+currentList = [[1, 2, 3, 4],
+               [5, 6, 7, 0]]
+
+currentNode = PuzzleNode(currentList, 0)
+currentNode.initializeOperatorsAndChildren()
+# goalstate1 = [[1,2,3,4],[5,6,7,0]]
+goalstate1 = setGoalState1(currentList, 2)
+goalstate2 = setGoalState2(len(list(chain.from_iterable(currentList))), 2)
+
+uniformCostSearch(currentNode, goalstate1, goalstate2)
+
+# puzzle, goalState1, goalState2 = getPuzzle(puzzleList[0])
+#
+# print(puzzle)
 
 
-puzzle, goalState1, goalState2 = getPuzzle(puzzleList[0])
-
-print(puzzle)
-print(goalState1)
-print(goalState2)
 
 
-
-# # iterate through list of puzzles and do the necessary work!
+# # iterate through list of puzzles and10
+# === Starting State ===
+# 1	2	3
+# 4	5	0  do the necessary work!
 # for x in range(len(puzzleList)):
-#     goalstate1 = setGoalState1(puzzleList[x], 2)
-#     goalstate2 = setGoalState2(len(puzzleList[x]), 2)
+#     print(listTo2DList(puzzleList[x], 2))
+    # goalstate1 = setGoalState1(puzzleList[x], 2)
+    # goalstate2 = setGoalState2(len(puzzleList[x]), 2)
 #
 #     puzzleList[x] = listTo2DList(puzzleList[x], 2)
 
