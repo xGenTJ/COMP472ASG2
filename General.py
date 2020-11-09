@@ -1,5 +1,6 @@
 from itertools import chain
 
+import random
 import numpy as np
 from Heuristics import *
 
@@ -20,6 +21,7 @@ def flattenOutList(list):
     for x in list:
         flatList.extend(x)
     print(flatList)
+    return flatList
 # example
 # flattenOutState(goalState1)
 
@@ -53,6 +55,83 @@ def listTo2DList(list, nbrows):
     newList.append(tempList2)
 
     return newList
+
+def generatePuzzles():
+    number_list = [0, 1, 2, 3, 4, 5, 6, 7]
+    for x in range(50):
+        # print("Original list:", number_list)
+        #
+        # random.shuffle(number_list)
+        # print("List after shuffle:", number_list)
+
+        listToStr = ' '.join([str(elem) for elem in number_list])
+
+        # print(listToStr)
+
+        if x != 49:
+            listToStr = listToStr + '\n'
+        else:
+            listToStr = listToStr
+
+        with open(r'puzzleInput.txt', 'a') as f:
+            f.write(listToStr)
+
+# generatePuzzles()
+
+def generateFileName(puzzleIndex, searchAlgoName, fileType):
+
+    fileName = str(puzzleIndex) + "_" + searchAlgoName + "_" + fileType
+    return fileName
+
+def appendToSearchFile(fileName, fn, gn, hn, state):
+    # to be called for each node traverse -> contains the search path
+    # if fn, gn, or hn are irrelevant, display 0
+    newState = flattenOutList(state)
+    listToStr = ' '.join([str(elem) for elem in newState])
+    with open(r'searchFiles/' + fileName, 'a') as f:
+        f.write(str(fn) + " " + str(gn) + " " + str(hn) + " " + listToStr + "\n")
+
+def appendToSolutionFile(fileName, tileMoved, cost, state):
+    # to be called if final NOT final solution
+    # tileMoved is the value of the tile that we switched with zero
+    # cost is the cost of the individual move (NOT overall cost)
+    # state is always the updated state
+    newState = flattenOutList(state)
+    listToStr = ' '.join([str(elem) for elem in newState])
+    with open(r'solutionFiles/' + fileName, 'a') as f:
+        f.write(str(tileMoved) + " " + str(cost) + " " + listToStr + "\n")
+
+def appendFinalSolutionToSolutionFile(fileName, cost, executionTime):
+    # to be called when final solution is found --> SOLUTION EXISTS
+    # cost is the cost of total solution path cost
+    # appends the solution to the file
+    with open(r'solutionFiles/' + fileName, 'a') as f:
+        f.write(str(cost) + " " + str(executionTime))
+
+def overWriteFiles(searchFileName, solutionFileName):
+    # to be called if we time out before finding a solution
+    # will overwrite to search file
+    with open(r'searchFiles/' + searchFileName, 'w') as f:
+        f.write("no solution")
+    with open(r'solutionFiles/' + solutionFileName, 'w') as f:
+        f.write("no solution")
+
+# # hardcoded for now, should represent the index of the puzzle read from the input file
+# puzzleIndex = 0
+# # hardcoded for now, should represent the name of the search algorithm used --> ucs, gbfs-h1, gbfs-h2, astar-h1, astar-h2
+# algoName = "ucs"
+# # either search.txt or solution.txt
+# fileType1 = "search.txt"
+# fileType2 = "solution.txt"
+# fileName1 = generateFileName(puzzleIndex, algoName, fileType1)
+# fileName2 = generateFileName(puzzleIndex, algoName, fileType2)
+# state = [[0, 2, 3, 4],
+#          [5, 6, 7, 1]]
+# # appendToSearchFile(fileName1, 1, 2, 3, state)
+# # appendToSolutionFile(fileName2, 1, 1, state)
+# # if no solution found before time out
+# overWriteFiles(fileName1, fileName2)
+
 
 def setGoalState1(twoDlist, nbrows):
 
