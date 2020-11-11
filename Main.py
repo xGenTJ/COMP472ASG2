@@ -1,8 +1,11 @@
 from General import *
 from Heuristics import *
-from UniformCostSearch import  *
+from UniformCostSearch import *
+from PriorityQueue import *
 # puzzleList = readFile("testFile.txt")
 
+openList = PriorityQueue()
+closedList = PriorityQueue()
 currentList = [[1, 2, 3, 4],
                [5, 6, 0, 7]]
 
@@ -12,7 +15,8 @@ currentNode.initializeOperatorsAndChildren()
 goalstate1 = setGoalState1(currentList, 2)
 goalstate2 = setGoalState2(len(list(chain.from_iterable(currentList))), 2)
 
-uniformCostSearch(currentNode, goalstate1, goalstate2)
+openList.insert(currentNode, 0)
+uniformCostSearch(openList, closedList, goalstate1, goalstate2)
 
 # puzzle, goalState1, goalState2 = getPuzzle(puzzleList[0])
 #
