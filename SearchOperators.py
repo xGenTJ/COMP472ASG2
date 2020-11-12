@@ -17,6 +17,10 @@ def moveLeft(number, currentState):
     cost = 1
 
     try:
+
+        if futureX < 0 or futureY < 0:
+            raise IndexError("Index Error moving up left")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -34,7 +38,7 @@ def moveLeft(number, currentState):
 
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 
-        print(exc_type, fname, exc_tb.tb_lineno)
+        # print(exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
 
@@ -48,6 +52,10 @@ def moveRight(number, currentState):
     cost = 1
 
     try:
+
+        if futureX < 0 or futureY < 0:
+            raise IndexError("Index Error moving up left")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -74,8 +82,13 @@ def moveUp(number, currentState):
     futureY = currentY - 1
     errorCode = 0
     cost = 1
-
+    # print('Current X and Y:', currentX, currentY)
+    # print('Future X and Y:', futureX, futureY)
     try:
+
+        if futureX < 0 or futureY < 0:
+            raise IndexError("Index Error moving up left")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -83,14 +96,13 @@ def moveUp(number, currentState):
         # print('Moved', number, 'up for a cost of 1')
         # # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
 
-
     except Exception as e:
         errorCode = 1
         exc_type, exc_obj, exc_tb = sys.exc_info()
 
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 
-        print(exc_type, fname, exc_tb.tb_lineno)
+        # print(exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
 
@@ -104,6 +116,10 @@ def moveDown(number, currentState):
     cost = 1
 
     try:
+
+        if futureX < 0 or futureY < 0:
+            raise IndexError("Index Error moving up left")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -116,7 +132,7 @@ def moveDown(number, currentState):
         errorCode = 1
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
+    #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
 
@@ -133,6 +149,10 @@ def moveDiagonalUpLeft(number, currentState):
         if futureX < 0 or futureY < 0:
             raise IndexError("Index Error moving up left")
 
+        elif not ((currentX == 0 or currentX == len(currentState[0]) - 1) and (
+                currentY == 0 or currentY == len(currentState[0]) - 1)):
+            raise IndexError("Index Error moving up left")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -145,7 +165,7 @@ def moveDiagonalUpLeft(number, currentState):
         errorCode = 1
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
+    #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
 
@@ -161,6 +181,11 @@ def moveDiagonalUpRight(number, currentState):
     try:
         if futureX < 0 or futureY < 0:
             raise IndexError("Index Error moving up right")
+
+        elif not ((currentX == 0 or currentX == len(currentState[0]) - 1) and (
+                currentY == 0 or currentY == len(currentState[0]) - 1)):
+            raise IndexError("Index Error moving up right")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -173,7 +198,7 @@ def moveDiagonalUpRight(number, currentState):
         errorCode = 1
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
+    #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
 
@@ -189,6 +214,11 @@ def moveDiagonalDownLeft(number, currentState):
     try:
         if futureX < 0 or futureY < 0:
             raise IndexError("Index Error moving down left")
+
+        elif not ((currentX == 0 or currentX == len(currentState[0]) - 1) and (
+                currentY == 0 or currentY == len(currentState[0]) - 1)):
+            raise IndexError("Index Error moving down left")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -201,7 +231,7 @@ def moveDiagonalDownLeft(number, currentState):
         errorCode = 1
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
+    #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
 
@@ -217,6 +247,12 @@ def moveDiagonalDownRight(number, currentState):
     try:
         if futureX < 0 or futureY < 0:
             raise IndexError("Index Error moving down right")
+
+        elif not ((currentX == 0 or currentX == len(currentState[0]) - 1) and (
+
+                currentY == 0 or currentY == len(currentState[0]) - 1)):
+            raise IndexError("Index Error moving down right")
+
         swappedNumber = currentState[futureY][futureX]
 
         futureState[futureY][futureX] = number
@@ -228,9 +264,10 @@ def moveDiagonalDownRight(number, currentState):
         errorCode = 1
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-      #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
+    #  print('Invalid Move: ', exc_type, fname, exc_tb.tb_lineno)
 
     return [futureState, cost, errorCode]
+
 
 def specialDiagonal(number, currentState):
     futureState = copy.deepcopy(currentState)
@@ -238,27 +275,29 @@ def specialDiagonal(number, currentState):
 
     errorCode = 0
     cost = 3
-
-    if currentX == 0:
-        if currentY == 0:  # top left corner
-            futureX = -1
-            futureY = -1  # moves to bottom right
-
-        else:  # bottom left corner
-            futureX = -1
-            futureY = 0  # moves to top right
-
-    elif currentX == len(currentState[0]) - 1:
-
-        if currentY == 0:  # top right corner
-            futureX = 0
-            futureY = -1  # moves to bottom left
-
-        else:  # bottom right corner
-            futureX = 0
-            futureY = 0  # moves to top left
-
     try:
+        if currentX == 0:
+            if currentY == 0:  # top left corner
+                futureX = -1
+                futureY = -1  # moves to bottom right
+
+            else:  # bottom left corner
+                futureX = -1
+                futureY = 0  # moves to top right
+
+        elif currentX == len(currentState[0]) - 1:
+
+            if currentY == 0:  # top right corner
+                futureX = 0
+                futureY = -1  # moves to bottom left
+
+            else:  # bottom right corner
+                futureX = 0
+                futureY = 0  # moves to top left
+
+        else:
+            raise IndexError("Index Error moving diagonally specially")
+
             swappedNumber = currentState[futureY][futureX]
 
             futureState[futureY][futureX] = number
@@ -274,6 +313,7 @@ def specialDiagonal(number, currentState):
 
     return [futureState, cost, errorCode]
 
+
 def wrapAround(number, currentState):
     futureState = copy.deepcopy(currentState)
     currentY, currentX = get2dIndex(currentState, number)
@@ -281,10 +321,10 @@ def wrapAround(number, currentState):
     errorCode = 0
     cost = 2
 
-    if currentX == 0:# if at the beginning of the row
+    if currentX == 0:  # if at the beginning of the row
         futureX = -1
 
-    elif currentX == len(currentState[0]) - 1: #if at the end of the row
+    elif currentX == len(currentState[0]) - 1:  # if at the end of the row
         futureX = 0
 
     try:
@@ -307,7 +347,6 @@ def wrapAround(number, currentState):
 def getListOperators():
     return [moveUp, moveDown, moveLeft, moveRight, moveDiagonalUpLeft, moveDiagonalUpRight, moveDiagonalDownLeft,
             moveDiagonalDownRight, specialDiagonal, wrapAround]
-
 
 # currentList = [[1, 2, 3],
 #                [4, 5, 0]]

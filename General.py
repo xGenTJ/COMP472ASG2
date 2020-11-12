@@ -3,7 +3,8 @@ from itertools import chain
 import random
 import numpy as np
 from Heuristics import *
-
+solutionFileLines = []
+searchFileLines = []
 
 goalState1 = [[1, 2, 3, 4],
               [5, 6, 7, 0]]
@@ -86,27 +87,49 @@ def generateFileName(puzzleIndex, searchAlgoName, fileType):
 def appendToSearchFile(fileName, fn, gn, hn, state):
     # to be called for each node traverse -> contains the search path
     # if fn, gn, or hn are irrelevant, display 0
+    global searchFileLines
     newState = flattenOutList(state)
     listToStr = ' '.join([str(elem) for elem in newState])
+    searchFileLines.append((str(fn) + " " + str(gn) + " " + str(hn) + " " + listToStr + "\n"))
+    # with open(r'searchFiles/' + fileName, 'a') as f:
+    #     # f.write(str(fn) + " " + str(gn) + " " + str(hn) + " " + listToStr + "\n")
+    #     f.write(searchFileLines[-1])
+
+
+def writeFinalSearchPath(fileName):
     with open(r'searchFiles/' + fileName, 'a') as f:
-        f.write(str(fn) + " " + str(gn) + " " + str(hn) + " " + listToStr + "\n")
+
+        for x in range(0, len(searchFileLines)):
+            f.write(searchFileLines[len(searchFileLines)-x -1])
+
+    f.close()
 
 def appendToSolutionFile(fileName, tileMoved, cost, state):
     # to be called if final NOT final solution
     # tileMoved is the value of the tile that we switched with zero
     # cost is the cost of the individual move (NOT overall cost)
     # state is always the updated state
+    global solutionFileLines
     newState = flattenOutList(state)
     listToStr = ' '.join([str(elem) for elem in newState])
-    with open(r'solutionFiles/' + fileName, 'a') as f:
-        f.write(str(tileMoved) + " " + str(cost) + " " + listToStr + "\n")
+    solutionFileLines.append((str(tileMoved) + " " + str(cost) + " " + listToStr + "\n"))
+    # with open(r'solutionFiles/' + fileName, 'a') as f:
+    #     f.write(str(tileMoved) + " " + str(cost) + " " + listToStr + "\n")
 
 def appendFinalSolutionToSolutionFile(fileName, cost, executionTime):
     # to be called when final solution is found --> SOLUTION EXISTS
     # cost is the cost of total solution path cost
     # appends the solution to the file
+    global solutionFileLines
     with open(r'solutionFiles/' + fileName, 'a') as f:
-        f.write(str(cost) + " " + str(executionTime))
+
+        for x in range(0, len(solutionFileLines)):
+            f.write(solutionFileLines[len(solutionFileLines)-x -1])
+
+
+        f.write('\n' + str(cost) + " " + str(executionTime))
+
+    f.close()
 
 def overWriteFiles(searchFileName, solutionFileName):
     # to be called if we time out before finding a solution

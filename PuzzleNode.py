@@ -10,7 +10,8 @@ class PuzzleNode:
         self.cost = cost
         self.actions = None
         self.children = None
-
+        self.parent = None
+        self.totalCost = 0
 
     def getOperators(self):
 
@@ -32,7 +33,7 @@ class PuzzleNode:
         futureNodes = []
 
         for x in self.actions:
-            futureNodes.append(PuzzleNode(x(0, self.state)[0], self.cost + x(0, self.state)[1]))
+            futureNodes.append(PuzzleNode(x(0, self.state)[0], x(0, self.state)[1]))
 
         futureNodes.sort(key=lambda x: x.cost) #sort the futureNodes depending on their cost
         self.children = futureNodes
@@ -49,9 +50,17 @@ class PuzzleNode:
         # condition to completed puzzle
         # print(goalState1)
         if self.state == goalState or self.state == goalState2:
-            print('You have reached the goal state!')
+            # print('You have reached the goal state!')
             return True
         else:
-            print('Keep trying!')
+            # print('Keep trying!')
             return False
 
+    def getTotalCost(self):
+        while self.parent is not None:
+
+            self.totalCost += self.parent.cost
+            currentNode = self.parent
+
+    def getString(self):
+        return '\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.state]) + '\n\n\n'
