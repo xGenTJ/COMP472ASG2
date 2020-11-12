@@ -28,7 +28,7 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, maxRecursion
             currentNode = currentNode.parent
 
         writeFinalSearchPath(searchFileName)
-        appendFinalSolutionToSolutionFile(solutionFileName, finalCost, 0)
+        WriteFinalSolutionFile(solutionFileName, finalCost, 0)
         print('FINAL COST:', finalCost)
         return True
 
@@ -38,7 +38,8 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, maxRecursion
 
     else:
         closedList.append(currentNode.state)
-        appendToSearchFile(searchFileName, 0, currentNode.getTotalCost(), 0, currentNode.state)
+
+        appendToSearchFile(searchFileName, 0, currentNode.totalCost, 0, currentNode.state)
         print('currentNode placed in the closedList')
         print('current State:')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.state]), '\n')

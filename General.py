@@ -116,7 +116,7 @@ def appendToSolutionFile(fileName, tileMoved, cost, state):
     # with open(r'solutionFiles/' + fileName, 'a') as f:
     #     f.write(str(tileMoved) + " " + str(cost) + " " + listToStr + "\n")
 
-def appendFinalSolutionToSolutionFile(fileName, cost, executionTime):
+def WriteFinalSolutionFile(fileName, cost, executionTime):
     # to be called when final solution is found --> SOLUTION EXISTS
     # cost is the cost of total solution path cost
     # appends the solution to the file

@@ -4,14 +4,14 @@ from SearchOperators import *
 
 class PuzzleNode:
 
-    def __init__(self, currentState, cost):
+    def __init__(self, currentState, cost, totalCost):
 
         self.state = currentState
         self.cost = cost
         self.actions = None
         self.children = None
         self.parent = None
-        self.totalCost = 0
+        self.totalCost = totalCost
 
     def getOperators(self):
 
@@ -33,7 +33,7 @@ class PuzzleNode:
         futureNodes = []
 
         for x in self.actions:
-            futureNodes.append(PuzzleNode(x(0, self.state)[0], x(0, self.state)[1]))
+            futureNodes.append(PuzzleNode(x(0, self.state)[0], x(0, self.state)[1], x(0, self.state)[1] + self.cost))
 
         futureNodes.sort(key=lambda x: x.cost) #sort the futureNodes depending on their cost
         self.children = futureNodes
@@ -55,12 +55,6 @@ class PuzzleNode:
         else:
             # print('Keep trying!')
             return False
-
-    def getTotalCost(self):
-        while self.parent is not None:
-
-            self.totalCost += self.parent.cost
-            currentNode = self.parent
 
     def getString(self):
         return '\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.state]) + '\n\n\n'

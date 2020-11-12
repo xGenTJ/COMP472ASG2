@@ -13,7 +13,7 @@ goalstate1 = setGoalState1(currentList, 2)
 goalstate2 = setGoalState2(len(list(chain.from_iterable(currentList))), 2)
 
 
-currentNode = PuzzleNode(currentList, 0)
+currentNode = PuzzleNode(currentList, 0, 0)
 currentNode.initializeOperatorsAndChildren()
 
 solutionList = []
