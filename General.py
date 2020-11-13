@@ -1,5 +1,5 @@
 from itertools import chain
-
+import sys
 import random
 import numpy as np
 from Heuristics import *
@@ -45,13 +45,13 @@ def readFile(fileName):
     return puzzleList
 
 
-def listTo2DList(list, nbrows):
-    listSize = len(list)
+def listTo2DList(passedList, nbrows):
+    listSize = len(passedList)
 
     newList = []
 
-    tempList = list[0:int(listSize/nbrows)]
-    tempList2 = list[int(listSize/nbrows):listSize]
+    tempList = passedList[0:int(listSize/nbrows)]
+    tempList2 = passedList[int(listSize/nbrows):listSize]
     newList.append(tempList)
     newList.append(tempList2)
 
@@ -103,6 +103,7 @@ def writeFinalSearchPath(fileName):
             f.write(searchFileLines[len(searchFileLines)-x -1])
 
     f.close()
+    searchFileLines.clear()
 
 def appendToSolutionFile(fileName, tileMoved, cost, state):
     # to be called if final NOT final solution
@@ -116,6 +117,7 @@ def appendToSolutionFile(fileName, tileMoved, cost, state):
     # with open(r'solutionFiles/' + fileName, 'a') as f:
     #     f.write(str(tileMoved) + " " + str(cost) + " " + listToStr + "\n")
 
+
 def WriteFinalSolutionFile(fileName, cost, executionTime):
     # to be called when final solution is found --> SOLUTION EXISTS
     # cost is the cost of total solution path cost
@@ -126,18 +128,21 @@ def WriteFinalSolutionFile(fileName, cost, executionTime):
         for x in range(0, len(solutionFileLines)):
             f.write(solutionFileLines[len(solutionFileLines)-x -1])
 
-
-        f.write('\n' + str(cost) + " " + str(executionTime))
+        f.write('\n' + str(cost) + " " + str(executionTime) + "\n\n")
 
     f.close()
+    solutionFileLines.clear()
+
 
 def overWriteFiles(searchFileName, solutionFileName):
     # to be called if we time out before finding a solution
     # will overwrite to search file
     with open(r'searchFiles/' + searchFileName, 'w') as f:
         f.write("no solution")
+        f.close()
     with open(r'solutionFiles/' + solutionFileName, 'w') as f:
         f.write("no solution")
+        f.close()
 
 # # hardcoded for now, should represent the index of the puzzle read from the input file
 # puzzleIndex = 0

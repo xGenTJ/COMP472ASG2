@@ -248,9 +248,7 @@ def moveDiagonalDownRight(number, currentState):
         if futureX < 0 or futureY < 0:
             raise IndexError("Index Error moving down right")
 
-        elif not ((currentX == 0 or currentX == len(currentState[0]) - 1) and (
-
-                currentY == 0 or currentY == len(currentState[0]) - 1)):
+        elif not ((currentX == 0 or currentX == len(currentState[0]) - 1) and (currentY == 0 or currentY == len(currentState[0]) - 1)):
             raise IndexError("Index Error moving down right")
 
         swappedNumber = currentState[futureY][futureX]
@@ -298,12 +296,11 @@ def specialDiagonal(number, currentState):
         else:
             raise IndexError("Index Error moving diagonally specially")
 
-            swappedNumber = currentState[futureY][futureX]
-
-            futureState[futureY][futureX] = number
-            futureState[currentY][currentX] = swappedNumber
-            # print('Moved', number, 'special diagonally for a cost of 3')
-            # # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
+        swappedNumber = currentState[futureY][futureX]
+        futureState[futureY][futureX] = number
+        futureState[currentY][currentX] = swappedNumber
+        # print('Moved', number, 'special diagonally for a cost of 3')
+        # # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in futureState]), '\n')
 
     except Exception as e:
         errorCode = 1

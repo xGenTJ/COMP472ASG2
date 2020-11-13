@@ -5,36 +5,41 @@ from PuzzleNode import *
 from General import *
 import sys
 
-def uniformCostSearch(openList, closedList, goalState1, goalState2, maxRecursion):
+
+def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, searchIndex):
     # currentNode should be the first node of the sorted openList (priority queue)
+    currentExecutionTime = time.time() - startTime
+    print('TIME ELAPSED:', currentExecutionTime)
     currentNode = openList.remove()
     isGoalState = currentNode.isGoalState(goalState1, goalState2)
-    solutionFileName = generateFileName(1, 'UCS', 'Solution.txt')
-    searchFileName = generateFileName(1, 'UCS', 'Search.txt')
+    solutionFileName = generateFileName(searchIndex, 'UCS', 'Solution.txt')
+    searchFileName = generateFileName(searchIndex, 'UCS', 'Search.txt')
+
+    if currentExecutionTime > 60:
+        print('Reached max timer')
+        overWriteFiles(searchFileName, solutionFileName)
+        return
 
     if isGoalState:
         # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.state]), '\n')
         print('Cost of going to goal state:', currentNode.cost)
         print('SOLUTION PATH:')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.state]), '\n')
-        finalCost = currentNode.cost
-        finalSolution = ('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.parent.state]))
+        finalCost = currentNode.totalCost
+        # finalSolution = ('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.parent.state]))
         while currentNode.parent is not None:
-
-            finalCost += currentNode.parent.cost
-
-            appendToSolutionFile(solutionFileName, 0, currentNode.parent.cost, currentNode.state)
+            currentY, currentX = get2dIndex(currentNode.state, 0)
+            swappedNumber = currentNode.parent.state[currentY][currentX]
+            print('SWAPPED NUMBER: ', swappedNumber)
+            appendToSolutionFile(solutionFileName, swappedNumber, currentNode.cost, currentNode.state)
             print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.parent.state]), '\n')
             currentNode = currentNode.parent
 
+        appendToSolutionFile(currentNode, 0, currentNode.cost, currentNode.state)
         writeFinalSearchPath(searchFileName)
-        WriteFinalSolutionFile(solutionFileName, finalCost, 0)
+        WriteFinalSolutionFile(solutionFileName, finalCost, currentExecutionTime)
         print('FINAL COST:', finalCost)
         return True
-
-    elif maxRecursion == 0:
-        print('Reached max recursion')
-        sys.exit()
 
     else:
         closedList.append(currentNode.state)
@@ -55,7 +60,7 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, maxRecursion
                 print('Node Option ' + str(i))
                 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in x.state]), '\n')
                 x.parent = currentNode
-                openList.insert(x, x.cost)
+                openList.insert(x, x.totalCost)
                 print('Node Option ' + str(i) + ' inserted into openList\n')
                 i += 1
 
@@ -69,7 +74,7 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, maxRecursion
     for x in closedList:
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in x]), '\n')
 
-    uniformCostSearch(openList, closedList, goalState1, goalState2, maxRecursion-1)
+    uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, searchIndex)
 
 
     return None

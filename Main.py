@@ -1,24 +1,35 @@
 from General import *
 from Heuristics import *
+import sys
 from UniformCostSearch import *
 from PriorityQueue import *
+import time
 
-# puzzleList = readFile("testFile.txt")
+puzzleList = readFile("puzzleInput.txt")
+sys.setrecursionlimit(10**6)
+for x in range(len(puzzleList)):
 
-openList = PriorityQueue()
-closedList = []
-currentList = [[1, 2, 3, 4],
-               [5, 0, 6, 7]]
-goalstate1 = setGoalState1(currentList, 2)
-goalstate2 = setGoalState2(len(list(chain.from_iterable(currentList))), 2)
+    openList = PriorityQueue()
+    closedList = []
+    # currentList = [[0, 6, 2, 1],
+    #                [7, 5, 3, 4]]
+    print(puzzleList[x])
+    currentList = listTo2DList(puzzleList[x], 2)
 
+    goalState1 = setGoalState1(currentList, 2)
+    goalState2 = setGoalState2(len(list(chain.from_iterable(currentList))), 2)
+    print('GOAL STATE 1:', goalState1)
+    print('GOAL STATE 2:', goalState2)
+    # goalState1 = [[1, 2, 3, 4],
+    #                [5, 6, 7, 0]]
+    #
+    # goalState2 = goalState1
 
-currentNode = PuzzleNode(currentList, 0, 0)
-currentNode.initializeOperatorsAndChildren()
-
-solutionList = []
-openList.insert(currentNode, 0)
-uniformCostSearch(openList, closedList, goalstate1, goalstate2, 20)
+    currentNode = PuzzleNode(currentList, 0, 0)
+    currentNode.initializeOperatorsAndChildren()
+    openList.insert(currentNode, 0)
+    startTime = time.time()
+    uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, x)
 
 # puzzle, goalState1, goalState2 = getPuzzle(puzzleList[0])
 #
@@ -30,8 +41,8 @@ uniformCostSearch(openList, closedList, goalstate1, goalstate2, 20)
 # 4	5	0  do the necessary work!
 # for x in range(len(puzzleList)):
 #     print(listTo2DList(puzzleList[x], 2))
-    # goalstate1 = setGoalState1(puzzleList[x], 2)
-    # goalstate2 = setGoalState2(len(puzzleList[x]), 2)
+# goalstate1 = setGoalState1(puzzleList[x], 2)
+# goalstate2 = setGoalState2(len(puzzleList[x]), 2)
 #
 #     puzzleList[x] = listTo2DList(puzzleList[x], 2)
 

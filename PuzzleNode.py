@@ -33,9 +33,9 @@ class PuzzleNode:
         futureNodes = []
 
         for x in self.actions:
-            futureNodes.append(PuzzleNode(x(0, self.state)[0], x(0, self.state)[1], x(0, self.state)[1] + self.cost))
+            futureNodes.append(PuzzleNode(x(0, self.state)[0], x(0, self.state)[1], x(0, self.state)[1] + self.totalCost))
 
-        futureNodes.sort(key=lambda x: x.cost) #sort the futureNodes depending on their cost
+        futureNodes.sort(key=lambda x: x.totalCost) #sort the futureNodes depending on their cost
         self.children = futureNodes
 
 
