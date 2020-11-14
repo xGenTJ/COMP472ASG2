@@ -5,6 +5,10 @@ import numpy as np
 from Heuristics import *
 solutionFileLines = []
 searchFileLines = []
+totalCost = 0
+totalNoSolution = 0
+searchCount = 0
+solutionCount = 0
 
 goalState1 = [[1, 2, 3, 4],
               [5, 6, 7, 0]]
@@ -144,23 +148,6 @@ def overWriteFiles(searchFileName, solutionFileName):
         f.write("no solution")
         f.close()
 
-# # hardcoded for now, should represent the index of the puzzle read from the input file
-# puzzleIndex = 0
-# # hardcoded for now, should represent the name of the search algorithm used --> ucs, gbfs-h1, gbfs-h2, astar-h1, astar-h2
-# algoName = "ucs"
-# # either search.txt or solution.txt
-# fileType1 = "search.txt"
-# fileType2 = "solution.txt"
-# fileName1 = generateFileName(puzzleIndex, algoName, fileType1)
-# fileName2 = generateFileName(puzzleIndex, algoName, fileType2)
-# state = [[0, 2, 3, 4],
-#          [5, 6, 7, 1]]
-# # appendToSearchFile(fileName1, 1, 2, 3, state)
-# # appendToSolutionFile(fileName2, 1, 1, state)
-# # if no solution found before time out
-# overWriteFiles(fileName1, fileName2)
-
-
 def setGoalState1(twoDlist, nbrows):
 
     newList = list(chain.from_iterable(twoDlist))
@@ -217,3 +204,48 @@ goalState = [[6, 5, 7, 3],
 
 # print(hammingDistance(state, goalState))
 # print(manhattanDistance(state, goalState))
+
+def addToTotalCost(cost):
+    global totalCost
+    totalCost += cost
+    return totalCost
+
+def writeToFileTotalCost():
+    global totalCost
+    with open(r'analysis/totalCost', 'w') as f:
+        f.write('Total Cost: ' + str(totalCost) + '\n')
+        f.write('Average Cost: ' + str(totalCost/50) + '\n')
+        t.close()
+
+def countFileLines(searchFileName, solutionFileName):
+    global searchCount, solutionCount
+    with open(r'searchFiles/' + searchFileName, 'r') as f:
+        for line in f.xreadlines():
+            searchCount += 1
+        f.close()
+
+    with open(r'solutionFiles/' + solutionFileName, 'r') as f:
+        for line in f.xreadlines():
+            solutionCount += 1
+        f.close()
+
+    return searchCount, solutionCount
+
+def writeLineCountToCountFile():
+    global searchCount, solutionCount
+    with open(r'analysis/countFile', 'w') as f:
+        f.write('Total Search Count: ' + str(searchCount) + '\n')
+        f.write('Average Search Count: ' + str(searchCount/50) + '\n')
+        f.write('Total Solution Count: ' + str(solutionCount) + '\n')
+        f.write('Average Solution Count: ' + str(solutionCount/50) + '\n')
+        f.close()
+
+def addToNoSolution():
+    global totalNoSolution
+    totalNoSolution += 1
+
+def writeToNoSolutionFile():
+    global totalNoSolution
+    with open(r'analysis/noSolution', 'w') as f:
+        f.write(str(totalNoSolution) + '\n')
+        f.close()

@@ -7,6 +7,7 @@ import time
 
 puzzleList = readFile("puzzleInput.txt")
 sys.setrecursionlimit(10**6)
+averageTimeStart = time.time()
 for x in range(len(puzzleList)):
 
     openList = PriorityQueue()
@@ -30,6 +31,24 @@ for x in range(len(puzzleList)):
     openList.insert(currentNode, 0)
     startTime = time.time()
     uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, x)
+
+totalTimeEnd = time.time() - averageTimeStart
+averageTimeEnd = totalTimeEnd/50
+with open(r'analysis/analysisFile', 'w') as f:
+    f.write('Total Time: ' + str(totalTimeEnd) + '\n')
+    f.write('Average Time: ' + str(averageTimeEnd) + '\n')
+    t.close()
+
+writeToFileTotalCost()
+writeToNoSolutionFile()
+
+for x in range(len(puzzleList)):
+    solutionFileName = generateFileName(x, 'UCS', 'Solution.txt')
+    searchFileName = generateFileName(x, 'UCS', 'Search.txt')
+    countFileLines(searchFileName, solutionFileName)
+
+writeLineCountToCountFile()
+
 
 # puzzle, goalState1, goalState2 = getPuzzle(puzzleList[0])
 #

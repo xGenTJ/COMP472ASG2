@@ -9,6 +9,7 @@ import sys
 def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, searchIndex):
     # currentNode should be the first node of the sorted openList (priority queue)
     currentExecutionTime = time.time() - startTime
+
     print('TIME ELAPSED:', currentExecutionTime)
     currentNode = openList.remove()
     isGoalState = currentNode.isGoalState(goalState1, goalState2)
@@ -17,6 +18,7 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, s
 
     if currentExecutionTime > 60:
         print('Reached max timer')
+        addToNoSolution()
         overWriteFiles(searchFileName, solutionFileName)
         return
 
@@ -39,6 +41,7 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, s
         writeFinalSearchPath(searchFileName)
         WriteFinalSolutionFile(solutionFileName, finalCost, currentExecutionTime)
         print('FINAL COST:', finalCost)
+        calculateAverageTotalCost(finalCost)
         return True
 
     else:
