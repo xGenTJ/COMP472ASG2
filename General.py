@@ -9,6 +9,7 @@ totalCost = 0
 totalNoSolution = 0
 searchCount = 0
 solutionCount = 0
+averageCost = 0
 
 goalState1 = [[1, 2, 3, 4],
               [5, 6, 7, 0]]
@@ -81,11 +82,56 @@ def generatePuzzles():
         with open(r'puzzleInput.txt', 'a') as f:
             f.write(listToStr)
 
-# generatePuzzles()
+def setGoalState1(twoDlist, nbrows):
+
+    newList = list(chain.from_iterable(twoDlist))
+
+    listSize = len(newList)
+    newList = sorted(newList)
+    newList.append(newList.pop(0))
+    goalState = []
+
+    tempList = newList[0:int(listSize/nbrows)]
+    tempList2 = newList[int(listSize/nbrows):listSize]
+    goalState.append(tempList)
+    goalState.append(tempList2)
+    return goalState
+
+def setGoalState2(nbelements, nbrows):
+
+    goalState = []
+    index = 1
+    tempArray = []
+
+    for row in range(nbrows):
+
+        for x in range(index, nbelements, nbrows):
+            # print(x)
+            tempArray.append(x)
+
+        # print(tempArray)
+        goalState.append(tempArray[:])
+        index += 1
+        tempArray.clear()
+
+    goalState[-1].append(0)
+
+    # print(goalState)
+
+    return goalState
+
+
+def getPuzzle(list):
+
+    goalstate1 = setGoalState1(list, 2)
+    goalstate2 = setGoalState2(len(list), 2)
+    puzzle = listTo2DList(list, 2)
+
+    return puzzle, goalState1, goalState2
 
 def generateFileName(puzzleIndex, searchAlgoName, fileType):
 
-    fileName = str(puzzleIndex) + "_" + searchAlgoName + "_" + fileType
+    fileName = searchAlgoName + '/' + str(puzzleIndex) + "_" + searchAlgoName + "_" + fileType
     return fileName
 
 def appendToSearchFile(fileName, fn, gn, hn, state):
@@ -148,104 +194,113 @@ def overWriteFiles(searchFileName, solutionFileName):
         f.write("no solution")
         f.close()
 
-def setGoalState1(twoDlist, nbrows):
-
-    newList = list(chain.from_iterable(twoDlist))
-
-    listSize = len(newList)
-    newList = sorted(newList)
-    newList.append(newList.pop(0))
-    goalState = []
-
-    tempList = newList[0:int(listSize/nbrows)]
-    tempList2 = newList[int(listSize/nbrows):listSize]
-    goalState.append(tempList)
-    goalState.append(tempList2)
-    return goalState
-
-def setGoalState2(nbelements, nbrows):
-
-    goalState = []
-    index = 1
-    tempArray = []
-
-    for row in range(nbrows):
-
-        for x in range(index, nbelements, nbrows):
-            # print(x)
-            tempArray.append(x)
-
-        # print(tempArray)
-        goalState.append(tempArray[:])
-        index += 1
-        tempArray.clear()
-
-    goalState[-1].append(0)
-
-    # print(goalState)
-
-    return goalState
-
-
-def getPuzzle(list):
-
-    goalstate1 = setGoalState1(list, 2)
-    goalstate2 = setGoalState2(len(list), 2)
-    puzzle = listTo2DList(list, 2)
-
-    return puzzle, goalState1, goalState2
-
-
-state = [[0, 2, 3, 4],
-         [5, 6, 7, 1]]
-
-goalState = [[6, 5, 7, 3],
-             [2, 0, 4, 1]]
-
-# print(hammingDistance(state, goalState))
-# print(manhattanDistance(state, goalState))
-
 def addToTotalCost(cost):
     global totalCost
     totalCost += cost
     return totalCost
 
-def writeToFileTotalCost():
+def writeToFileTotalCost(algo):
     global totalCost
-    with open(r'analysis/totalCost', 'w') as f:
-        f.write('Total Cost: ' + str(totalCost) + '\n')
-        f.write('Average Cost: ' + str(totalCost/50) + '\n')
-        t.close()
+
+    if algo == 0:
+        with open(r'analysis/UCS/totalCost', 'w') as f:
+            f.write('Total Cost: ' + str(totalCost) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(50-(totalNoSolution/2))) + '\n')
+            f.close()
+
+    elif algo == 1:
+        with open(r'analysis/GBFS/totalCost', 'w') as f:
+            f.write('Total Cost: ' + str(totalCost) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(50-(totalNoSolution/2))) + '\n')
+            f.close()
+
+    elif algo == 2:
+        with open(r'analysis/Astar/totalCost', 'w') as f:
+            f.write('Total Cost: ' + str(totalCost) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(50-(totalNoSolution/2))) + '\n')
+            f.close()
+
+def countCosts(solutionFileName):
+
+    global totalCost
+    global averageCost
+
+    with open(r'solutionFiles/' + solutionFileName, 'r') as f:
+        for line in f:
+            listLine = list(line.split(' '))
+            if 'no solution' not in line:
+
+                if len(listLine) == 2:
+                    print(listLine)
+                    totalCost += float(listLine[0])
+
+        f.close()
 
 def countFileLines(searchFileName, solutionFileName):
     global searchCount, solutionCount
+    print("COUNTING FILE LINES")
     with open(r'searchFiles/' + searchFileName, 'r') as f:
-        for line in f.xreadlines():
-            searchCount += 1
+        for line in f:
+            if 'no solution' in line:
+                addToNoSolution()
+                continue
+            else:
+                searchCount += 1
+                print(searchCount)
         f.close()
-
     with open(r'solutionFiles/' + solutionFileName, 'r') as f:
-        for line in f.xreadlines():
-            solutionCount += 1
+        for line in f:
+            if 'no solution' in line:
+                addToNoSolution()
+                continue
+            else:
+                solutionCount += 1
         f.close()
 
     return searchCount, solutionCount
 
-def writeLineCountToCountFile():
-    global searchCount, solutionCount
-    with open(r'analysis/countFile', 'w') as f:
-        f.write('Total Search Count: ' + str(searchCount) + '\n')
-        f.write('Average Search Count: ' + str(searchCount/50) + '\n')
-        f.write('Total Solution Count: ' + str(solutionCount) + '\n')
-        f.write('Average Solution Count: ' + str(solutionCount/50) + '\n')
-        f.close()
+def writeLineCountToCountFile(algo):
+    global searchCount, solutionCount, totalNoSolution
+
+    if algo == 0:
+        with open(r'analysis/UCS/countFile', 'w') as f:
+            f.write('Total Search Steps: ' + str(searchCount) + '\n')
+            f.write('Average Search Steps: ' + str(searchCount/(50-(totalNoSolution/2))) + '\n')
+            f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
+            f.write('Average Solution Steps: ' + str(solutionCount/(50-(totalNoSolution/2))) + '\n')
+            f.close()
+    if algo == 1:
+        with open(r'analysis/GBFS/countFile', 'w') as f:
+            f.write('Total Search Steps: ' + str(searchCount) + '\n')
+            f.write('Average Search Steps: ' + str(searchCount/(50-(totalNoSolution/2))) + '\n')
+            f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
+            f.write('Average Solution Steps: ' + str(solutionCount/(50-(totalNoSolution/2))) + '\n')
+            f.close()
+    if algo == 2:
+        with open(r'analysis/Astar/countFile', 'w') as f:
+            f.write('Total Search Steps: ' + str(searchCount) + '\n')
+            f.write('Average Search Steps: ' + str(searchCount / (50 - (totalNoSolution / 2))) + '\n')
+            f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
+            f.write(
+                'Average Solution Steps: ' + str(solutionCount / (50 - (totalNoSolution / 2))) + '\n')
+            f.close()
 
 def addToNoSolution():
     global totalNoSolution
     totalNoSolution += 1
 
-def writeToNoSolutionFile():
+def writeToNoSolutionFile(algo):
     global totalNoSolution
-    with open(r'analysis/noSolution', 'w') as f:
-        f.write(str(totalNoSolution) + '\n')
-        f.close()
+
+    if algo == 0:
+        with open(r'analysis/UCS/noSolution', 'w') as f:
+            f.write('Total files with no solution: ' + str(totalNoSolution/2) + '\n')
+            f.close()
+    if algo == 1:
+        with open(r'analysis/GBFS/noSolution', 'w') as f:
+            f.write('Total files with no solution: ' + str(totalNoSolution/2) + '\n')
+            f.close()
+    if algo == 2:
+        with open(r'analysis/Astar/noSolution', 'w') as f:
+            f.write('Total files with no solution: ' + str(totalNoSolution/2) + '\n')
+            f.close()
