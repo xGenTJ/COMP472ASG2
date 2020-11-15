@@ -41,7 +41,7 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, s
         writeFinalSearchPath(searchFileName)
         WriteFinalSolutionFile(solutionFileName, finalCost, currentExecutionTime)
         print('FINAL COST:', finalCost)
-        calculateAverageTotalCost(finalCost)
+        addToTotalCost(finalCost)
         return True
 
     else:
