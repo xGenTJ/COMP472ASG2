@@ -14,10 +14,10 @@ Python 3.8
 -----------------------------------------------------------------------------------------------------------------
                                            INSTRUCTIONS
 -----------------------------------------------------------------------------------------------------------------  
-#Run Main.py for the Uniform Cost Search Algorithm.
-#Run GBFSMain.py for the Greedy Best First Search Algorithm.
-#Run AStarMain.py for the A* Algorithm.
-#Run ScaleUpAStarManDist.py for the scaled up version of the A* Algorithm with the Manhattan Distance heuristic.
+Run Main.py for the Uniform Cost Search Algorithm.
+Run GBFSMain.py for the Greedy Best First Search Algorithm.
+Run AStarMain.py for the A* Algorithm.
+Run ScaleUpAStarManDist.py for the scaled up version of the A* Algorithm with the Manhattan Distance heuristic.
 
 
 -----------------------------------------------------------------------------------------------------------------
