@@ -7,7 +7,7 @@ import sys
 
 
 def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, searchIndex):
-    # currentNode should be the first node of the sorted openList (priority queue)
+
     currentExecutionTime = time.time() - startTime
 
     print('TIME ELAPSED:', currentExecutionTime)
@@ -23,12 +23,10 @@ def uniformCostSearch(openList, closedList, goalState1, goalState2, startTime, s
         return
 
     if isGoalState:
-        # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.state]), '\n')
         print('Cost of going to goal state:', currentNode.cost)
         print('SOLUTION PATH:')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.state]), '\n')
         finalCost = currentNode.totalCost
-        # finalSolution = ('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.parent.state]))
         while currentNode.parent is not None:
             currentY, currentX = get2dIndex(currentNode.state, 0)
             swappedNumber = currentNode.parent.state[currentY][currentX]

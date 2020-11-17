@@ -85,16 +85,21 @@ def generatePuzzles():
 def setGoalState1(twoDlist, nbrows):
 
     newList = list(chain.from_iterable(twoDlist))
-
     listSize = len(newList)
+    elementPerRow = int(listSize/nbrows)
     newList = sorted(newList)
     newList.append(newList.pop(0))
     goalState = []
-
-    tempList = newList[0:int(listSize/nbrows)]
-    tempList2 = newList[int(listSize/nbrows):listSize]
-    goalState.append(tempList)
-    goalState.append(tempList2)
+    i = 0
+    j = 1
+    for x in range(nbrows):
+        goalState.append(newList[i: elementPerRow * j])
+        i += elementPerRow
+        j += 1
+    # tempList = newList[0:int(listSize/nbrows)]
+    # tempList2 = newList[int(listSize/nbrows):listSize]
+    # goalState.append(tempList)
+    # goalState.append(tempList2)
     return goalState
 
 def setGoalState2(nbelements, nbrows):
@@ -199,25 +204,30 @@ def addToTotalCost(cost):
     totalCost += cost
     return totalCost
 
-def writeToFileTotalCost(algo):
+def writeToFileTotalCost(algo, numberOfPuzzles):
     global totalCost
 
     if algo == 0:
         with open(r'analysis/UCS/totalCost', 'w') as f:
             f.write('Total Cost: ' + str(totalCost) + '\n')
-            f.write('Average Cost: ' + str(totalCost/(50-(totalNoSolution/2))) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
             f.close()
 
     elif algo == 1:
         with open(r'analysis/GBFS/totalCost', 'w') as f:
             f.write('Total Cost: ' + str(totalCost) + '\n')
-            f.write('Average Cost: ' + str(totalCost/(50-(totalNoSolution/2))) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
             f.close()
 
     elif algo == 2:
         with open(r'analysis/Astar/totalCost', 'w') as f:
             f.write('Total Cost: ' + str(totalCost) + '\n')
-            f.write('Average Cost: ' + str(totalCost/(50-(totalNoSolution/2))) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
+            f.close()
+    elif algo == 3:
+        with open(r'analysis/Scaled/totalCost', 'w') as f:
+            f.write('Total Cost: ' + str(totalCost) + '\n')
+            f.write('Average Cost: ' + str(totalCost/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
             f.close()
 
 def countCosts(solutionFileName):
@@ -231,14 +241,12 @@ def countCosts(solutionFileName):
             if 'no solution' not in line:
 
                 if len(listLine) == 2:
-                    print(listLine)
                     totalCost += float(listLine[0])
 
         f.close()
 
 def countFileLines(searchFileName, solutionFileName):
     global searchCount, solutionCount
-    print("COUNTING FILE LINES")
     with open(r'searchFiles/' + searchFileName, 'r') as f:
         for line in f:
             if 'no solution' in line:
@@ -246,7 +254,6 @@ def countFileLines(searchFileName, solutionFileName):
                 continue
             else:
                 searchCount += 1
-                print(searchCount)
         f.close()
     with open(r'solutionFiles/' + solutionFileName, 'r') as f:
         for line in f:
@@ -259,30 +266,37 @@ def countFileLines(searchFileName, solutionFileName):
 
     return searchCount, solutionCount
 
-def writeLineCountToCountFile(algo):
+def writeLineCountToCountFile(algo, numberOfPuzzles):
     global searchCount, solutionCount, totalNoSolution
 
     if algo == 0:
         with open(r'analysis/UCS/countFile', 'w') as f:
             f.write('Total Search Steps: ' + str(searchCount) + '\n')
-            f.write('Average Search Steps: ' + str(searchCount/(50-(totalNoSolution/2))) + '\n')
+            f.write('Average Search Steps: ' + str(searchCount/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
             f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
-            f.write('Average Solution Steps: ' + str(solutionCount/(50-(totalNoSolution/2))) + '\n')
+            f.write('Average Solution Steps: ' + str(solutionCount/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
             f.close()
     if algo == 1:
         with open(r'analysis/GBFS/countFile', 'w') as f:
             f.write('Total Search Steps: ' + str(searchCount) + '\n')
             f.write('Average Search Steps: ' + str(searchCount/(50-(totalNoSolution/2))) + '\n')
             f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
-            f.write('Average Solution Steps: ' + str(solutionCount/(50-(totalNoSolution/2))) + '\n')
+            f.write('Average Solution Steps: ' + str(solutionCount/(numberOfPuzzles-(totalNoSolution/2))) + '\n')
             f.close()
     if algo == 2:
         with open(r'analysis/Astar/countFile', 'w') as f:
             f.write('Total Search Steps: ' + str(searchCount) + '\n')
-            f.write('Average Search Steps: ' + str(searchCount / (50 - (totalNoSolution / 2))) + '\n')
+            f.write('Average Search Steps: ' + str(searchCount / (numberOfPuzzles - (totalNoSolution / 2))) + '\n')
             f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
             f.write(
-                'Average Solution Steps: ' + str(solutionCount / (50 - (totalNoSolution / 2))) + '\n')
+                'Average Solution Steps: ' + str(solutionCount / (numberOfPuzzles - (totalNoSolution / 2))) + '\n')
+            f.close()
+    if algo == 3:
+        with open(r'analysis/Scaled/countFile', 'w') as f:
+            f.write('Total Search Steps: ' + str(searchCount) + '\n')
+            f.write('Average Search Steps: ' + str(searchCount / (numberOfPuzzles - (totalNoSolution / 2))) + '\n')
+            f.write('Total Solution Steps: ' + str(solutionCount) + '\n')
+            f.write('Average Solution Steps: ' + str(solutionCount / (numberOfPuzzles - (totalNoSolution / 2))) + '\n')
             f.close()
 
 def addToNoSolution():
@@ -304,3 +318,8 @@ def writeToNoSolutionFile(algo):
         with open(r'analysis/Astar/noSolution', 'w') as f:
             f.write('Total files with no solution: ' + str(totalNoSolution/2) + '\n')
             f.close()
+    if algo == 3:
+        with open(r'analysis/Scaled/noSolution', 'w') as f:
+            f.write('Total files with no solution: ' + str(totalNoSolution/2) + '\n')
+            f.close()
+

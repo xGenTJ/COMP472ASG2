@@ -18,7 +18,6 @@ class PuzzleNode:
         legalOperators = []
         # priorityQueue = PriorityQueue()
         for x in getListOperators():
-
             if x(0, self.state)[2] == 0:
                 legalOperators.append(x)
                 # priorityQueue.insert(x, x(0, self.state)[2])

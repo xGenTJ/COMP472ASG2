@@ -27,7 +27,6 @@ def greedyBestFirstSearch(openList, closedList, goalState1, goalState2, startTim
         print('SOLUTION PATH:')
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.state]), '\n')
         finalCost = currentNode.totalCost
-        # finalSolution = ('\n'.join(['\t'.join([str(cell) for cell in row]) for row in currentNode.parent.state]))
         while currentNode.parent is not None:
             currentY, currentX = get2dIndex(currentNode.state, 0)
             swappedNumber = currentNode.parent.state[currentY][currentX]
@@ -62,8 +61,8 @@ def greedyBestFirstSearch(openList, closedList, goalState1, goalState2, startTim
                 print('Node Option ' + str(i))
                 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in x.state]), '\n')
                 x.parent = currentNode
-                # openList.insert(x, hammingDistance(x.state, goalState1, goalState2))
-                openList.insert(x, manhattanDistance(x.state, goalState1, goalState2))
+                openList.insert(x, hammingDistance(x.state, goalState1, goalState2))
+                # openList.insert(x, manhattanDistance(x.state, goalState1, goalState2))
                 # openList.insert(x, h0(x.state, goalState1))
                 print('Node Option ' + str(i) + ' inserted into openList\n')
                 i += 1
